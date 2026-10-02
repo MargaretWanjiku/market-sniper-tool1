@@ -1,0 +1,30 @@
+// Config for Deriv OAuth and WebSockets
+export const DERIV_CONFIG = {
+  // Replace with your actual Deriv App ID if needed
+  appId: "YOUR_APP_ID", 
+  // Updated exact match domain URL
+  redirectUrl: "https://www.marketsnipertool.site/",
+  
+  getLoginUrl() {
+    return `https://oauth.deriv.com/oauth2/authorize?app_id=${this.appId}&l=EN&brand=deriv&redirect_uri=${encodeURIComponent(this.redirectUrl)}`;
+  }
+};
+
+/**
+ * Helper to handle login redirect or extract token from URL upon return
+ */
+export const handleDerivLogin = () => {
+  const loginUrl = DERIV_CONFIG.getLoginUrl();
+  window.location.href = loginUrl;
+};
+
+/**
+ * Parses tokens returned from Deriv OAuth redirect
+ */
+export const extractTokenFromUrl = () => {
+  const hash = window.location.hash.substring(1);
+  const params = new URLSearchParams(hash);
+  // Look for token in parameters or query string
+  const token = params.get("token1") || new URLSearchParams(window.location.search).get("token1");
+  return token;
+};
